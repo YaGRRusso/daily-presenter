@@ -1,0 +1,7 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": ["@yagrrusso/eslint-config/node"]
+}
