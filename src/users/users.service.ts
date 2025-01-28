@@ -1,7 +1,8 @@
 import { CreateUserDto } from './dto/create-user.dto'
-import { SearchUserDto } from './dto/search-user.dto'
+import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
+import { query, QueryMethod } from '@/common/helpers/query.helper'
 import { User } from '@/schemas/user.schema'
 
 import { Injectable } from '@nestjs/common'
@@ -19,23 +20,19 @@ export class UsersService {
     return newUser.save()
   }
 
-  search(searchUserDto: SearchUserDto) {
-    return this.UserModel.find(searchUserDto).select('-password').exec()
+  async findAll(findUserDto?: FindUserDto, method?: QueryMethod) {
+    return this.UserModel.find(query(findUserDto, method)).select('-password').exec()
   }
 
-  findAll() {
-    return this.UserModel.find().select('-password').exec()
+  async findOne(findUserDto?: FindUserDto) {
+    return this.UserModel.findOne(findUserDto).exec()
   }
 
-  findOne(id: string) {
-    return this.UserModel.findById(id).select('-password').exec()
-  }
-
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     return this.UserModel.updateOne({ _id: id }, updateUserDto).select('-password').exec()
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     return this.UserModel.deleteOne({ _id: id }).select('-password').exec()
   }
 }

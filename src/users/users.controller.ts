@@ -1,7 +1,9 @@
 import { CreateUserDto } from './dto/create-user.dto'
-import { SearchUserDto } from './dto/search-user.dto'
+import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UsersService } from './users.service'
+
+import { QueryMethod } from '@/common/helpers/query.helper'
 
 import { Controller, Post, Body, Get, Delete, Param, Patch } from '@nestjs/common'
 
@@ -14,19 +16,14 @@ export class UsersController {
     return this.usersService.create(createUserDto)
   }
 
-  @Get('search')
-  search(@Body() searchUserDto: SearchUserDto) {
-    return this.usersService.search(searchUserDto)
-  }
-
   @Get()
-  findAll() {
-    return this.usersService.findAll()
+  findAll(@Body() searchUserDto: FindUserDto) {
+    return this.usersService.findAll(searchUserDto, QueryMethod.AND)
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id)
+    return this.usersService.findOne({ id })
   }
 
   @Patch(':id')
