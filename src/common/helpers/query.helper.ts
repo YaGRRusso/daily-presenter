@@ -3,7 +3,7 @@ export enum QueryMethod {
   OR = 'or',
 }
 
-export function query(query: Record<string, any>, method?: QueryMethod) {
+export function ApplyQuery(query: Record<string, any>, method?: QueryMethod) {
   if (!method) return query
 
   const result = Object.keys(query).reduce((acc, key) => {

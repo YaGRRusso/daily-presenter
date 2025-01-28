@@ -2,7 +2,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
-import { query, QueryMethod } from '@/common/helpers/query.helper'
+import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { User } from '@/schemas/user.schema'
 
 import { Injectable } from '@nestjs/common'
@@ -21,7 +21,7 @@ export class UsersService {
   }
 
   async findAll(findUserDto?: FindUserDto, method?: QueryMethod) {
-    return this.UserModel.find(query(findUserDto, method)).select('-password').exec()
+    return this.UserModel.find(ApplyQuery(findUserDto, method)).select('-password').exec()
   }
 
   async findOne(findUserDto?: FindUserDto) {

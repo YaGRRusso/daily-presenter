@@ -1,13 +1,11 @@
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsStrongPassword,
-} from 'class-validator'
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import { CommonDto } from '@/common/dto/common.dto'
+import { RoleDto } from '@/common/dto/role.dto'
+import { ApplyMixins } from '@/common/helpers/mixins.helper'
 
-export class UserDto {
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from 'class-validator'
+
+export class UserDto extends CommonDto {
   @IsOptional()
   @IsString()
   id: string
@@ -39,9 +37,7 @@ export class UserDto {
   @IsOptional()
   @IsString()
   avatar: string
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  roles?: string[]
 }
+
+export interface UserDto extends RoleDto {}
+ApplyMixins(UserDto, [RoleDto])
