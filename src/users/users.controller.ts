@@ -3,6 +3,7 @@ import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UsersService } from './users.service'
 
+import { IsPublic } from '@/auth/decorators/public.decorator'
 import { QueryMethod } from '@/common/helpers/query.helper'
 
 import { Controller, Post, Body, Get, Delete, Param, Patch } from '@nestjs/common'
@@ -12,6 +13,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @IsPublic()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto)
   }
