@@ -1,4 +1,4 @@
-import { UserPayload } from '../entities/payload.entity'
+import { AuthPayload } from '../entities/payload.entity'
 
 import { JwtUser } from '@/auth/entities/user.entity'
 
@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     })
   }
 
-  async validate(payload: UserPayload): Promise<JwtUser> {
+  async validate(payload: AuthPayload): Promise<JwtUser> {
     return {
       id: payload.sub,
       email: payload.email,

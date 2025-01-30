@@ -44,7 +44,7 @@ export class User {
   @IsString()
   avatar?: string
 
-  @Prop()
+  @Prop({ default: RoleEnum.USER })
   @IsOptional()
   @IsString()
   @IsEnum(RoleEnum)

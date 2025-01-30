@@ -6,7 +6,9 @@ import { UsersModule } from '@/users/users.module'
 
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
+import { config } from 'dotenv'
 
+config()
 @Module({
   imports: [
     UsersModule,

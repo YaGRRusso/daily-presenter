@@ -1,6 +1,6 @@
 import { RoleEnum } from '@/common/dto/role.dto'
 
-export class UserPayload {
+export class AuthPayload {
   sub: string
   email: string
   name: string

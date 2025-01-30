@@ -1,8 +1,8 @@
-import { Role } from '@/common/dto/role.dto'
+import { RoleEnum } from '@/common/dto/role.dto'
 
 import { SetMetadata } from '@nestjs/common'
 
 export const ROLE_KEY = 'role'
-export const NeedRole = (role: Role) => {
+export const NeedRole = (role: RoleEnum) => {
   return SetMetadata(ROLE_KEY, role)
 }

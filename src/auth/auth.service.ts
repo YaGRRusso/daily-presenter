@@ -1,4 +1,4 @@
-import { UserPayload } from './entities/payload.entity'
+import { AuthPayload } from './entities/payload.entity'
 
 import { UsersService } from '@/users/users.service'
 
@@ -13,17 +13,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(email: string, password: string) {
-    const user = await this.validate(email, password)
-    const payload: UserPayload = {
-      sub: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-    }
-    return this.jwtService.sign(payload)
-  }
-
   async validate(email: string, password: string) {
     const user = await this.usersService.findOne({ email })
 
@@ -33,5 +22,18 @@ export class AuthService {
     }
 
     throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.validate(email, password)
+
+    const payload: AuthPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    }
+
+    return this.jwtService.sign(payload)
   }
 }
