@@ -2,6 +2,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { JwtAuthGuard } from './auth/guards/jwt.guard'
+import { ConvocationsModule } from './convocations/convocations.module'
 import { UsersModule } from './users/users.module'
 
 import { Module } from '@nestjs/common'
@@ -11,7 +12,12 @@ import { config } from 'dotenv'
 
 config()
 @Module({
-  imports: [MongooseModule.forRoot(process.env.DATABASE_URL), UsersModule, AuthModule],
+  imports: [
+    MongooseModule.forRoot(process.env.DATABASE_URL),
+    UsersModule,
+    AuthModule,
+    ConvocationsModule,
+  ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
