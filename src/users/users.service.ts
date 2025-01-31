@@ -2,6 +2,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
+import { RoleEnum } from '@/common/dto/role.dto'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { User } from '@/schemas/user.schema'
 
@@ -15,8 +16,9 @@ export class UsersService {
   constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
 
   async create({ password, ...createUserDto }: CreateUserDto) {
+    delete createUserDto.role
     const hash = await bcrypt.hash(password, 8)
-    const newUser = new this.UserModel({ password: hash, ...createUserDto })
+    const newUser = new this.UserModel({ password: hash, role: RoleEnum.USER, ...createUserDto })
     return newUser.save()
   }
 

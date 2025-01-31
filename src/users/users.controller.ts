@@ -4,9 +4,10 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { UsersService } from './users.service'
 
 import { IsPublic } from '@/auth/decorators/public.decorator'
+import { AuthRequest } from '@/auth/entities/request.entity'
 import { QueryMethod } from '@/common/helpers/query.helper'
 
-import { Controller, Post, Body, Get, Delete, Param, Patch } from '@nestjs/common'
+import { Controller, Post, Body, Get, Delete, Param, Patch, Req } from '@nestjs/common'
 
 @Controller('users')
 export class UsersController {
@@ -19,8 +20,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@Body() searchUserDto: FindUserDto) {
-    return this.usersService.findAll(searchUserDto, QueryMethod.AND)
+  findAll(@Body() findUserDto: FindUserDto) {
+    return this.usersService.findAll(findUserDto, QueryMethod.AND)
   }
 
   @Get(':id')
@@ -28,13 +29,13 @@ export class UsersController {
     return this.usersService.findOne({ id })
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto)
+  @Patch()
+  update(@Req() req: AuthRequest, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(req.user.id, updateUserDto)
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id)
+  @Delete()
+  remove(@Req() req: AuthRequest) {
+    return this.usersService.remove(req.user.id)
   }
 }
