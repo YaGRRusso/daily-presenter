@@ -3,9 +3,13 @@ import { CommonDto } from '@/common/dto/common.dto'
 import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class ConvocationDto extends CommonDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   id: string
+
+  @IsNotEmpty()
+  @IsString()
+  key: string
 
   @IsNotEmpty()
   @IsString()
@@ -20,7 +24,7 @@ export class ConvocationDto extends CommonDto {
   @IsDate()
   expiresAt: Date
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   createdBy: string
 }

@@ -4,19 +4,28 @@ import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
 import { NeedRole } from '@/auth/decorators/role.decorator'
+import { AuthRequest } from '@/auth/entities/request.entity'
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard'
 import { RoleGuard } from '@/auth/guards/role.guard'
 import { RoleEnum } from '@/common/dto/role.dto'
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common'
 
 @Controller('convocations')
 export class ConvocationsController {
   constructor(private readonly convocationsService: ConvocationsService) {}
 
   @Post()
-  create(@Body() createConvocationDto: CreateConvocationDto) {
-    return this.convocationsService.create(createConvocationDto)
+  create(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
+    return this.convocationsService.create({ createdBy: req.user.id, ...createConvocationDto })
+  }
+
+  @Post('findOrCreate')
+  findOneOrCreate(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
+    return this.convocationsService.findOneOrCreate({
+      createdBy: req.user.id,
+      ...createConvocationDto,
+    })
   }
 
   @Get()

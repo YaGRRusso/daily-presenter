@@ -2,27 +2,45 @@ import { CreateConvocationDto } from './dto/create-convocation.dto'
 import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
+import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
+import { Convocation } from '@/schemas/convocation.schema'
+
 import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
 
 @Injectable()
 export class ConvocationsService {
-  create(createConvocationDto: CreateConvocationDto) {
-    return ['This action adds a new convocation', createConvocationDto]
+  constructor(@InjectModel(Convocation.name) private ConvocationModel: Model<Convocation>) {}
+
+  async create(createConvocationDto: CreateConvocationDto) {
+    const newConvocation = new this.ConvocationModel(createConvocationDto)
+    return newConvocation.save()
   }
 
-  findAll(findConvocationDto?: FindConvocationDto) {
-    return [`This action returns all convocations`, findConvocationDto]
+  async findOneOrCreate(createConvocationDto: CreateConvocationDto) {
+    const convocation = await this.findOne({ key: createConvocationDto.key })
+    if (convocation) return convocation
+
+    const newConvocation = new this.ConvocationModel(createConvocationDto)
+    return newConvocation.save()
   }
 
-  findOne(findConvocationDto?: FindConvocationDto) {
-    return [`This action returns one convocation`, findConvocationDto]
+  async findAll(findConvocationDto?: FindConvocationDto, method?: QueryMethod) {
+    return this.ConvocationModel.find(ApplyQuery(findConvocationDto, method))
+      .populate('assignedUsers')
+      .exec()
   }
 
-  update(id: string, updateConvocationDto: UpdateConvocationDto) {
-    return [`This action updates a #${id} convocation`, updateConvocationDto]
+  async findOne(findConvocationDto?: FindConvocationDto) {
+    return this.ConvocationModel.findOne(findConvocationDto).exec()
   }
 
-  remove(id: string) {
-    return [`This action removes a #${id} convocation`]
+  async update(id: string, updateConvocationDto: UpdateConvocationDto) {
+    return this.ConvocationModel.updateOne({ _id: id }, updateConvocationDto).exec()
+  }
+
+  async remove(id: string) {
+    return this.ConvocationModel.deleteOne({ _id: id }).exec()
   }
 }
