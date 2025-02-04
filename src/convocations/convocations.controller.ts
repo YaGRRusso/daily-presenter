@@ -20,14 +20,6 @@ export class ConvocationsController {
     return this.convocationsService.create({ createdBy: req.user.id, ...createConvocationDto })
   }
 
-  @Post('findOrCreate')
-  findOneOrCreate(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
-    return this.convocationsService.findOneOrCreate({
-      createdBy: req.user.id,
-      ...createConvocationDto,
-    })
-  }
-
   @Get()
   findAll(@Body() findConvocationDto: FindConvocationDto) {
     return this.convocationsService.findAll(findConvocationDto)
@@ -36,6 +28,14 @@ export class ConvocationsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.convocationsService.findOne({ id })
+  }
+
+  @Post('findOrCreate')
+  findOneOrCreate(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
+    return this.convocationsService.findOneOrCreate({
+      createdBy: req.user.id,
+      ...createConvocationDto,
+    })
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)

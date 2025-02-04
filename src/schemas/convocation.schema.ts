@@ -3,7 +3,7 @@ import { User } from './user.schema'
 import { AdjustDate, AdjustDateUnit } from '@/common/helpers/date.helper'
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsArray, IsDate, IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsDate, IsNotEmpty, IsString, MinLength } from 'class-validator'
 import mongoose from 'mongoose'
 
 @Schema({ timestamps: true })
@@ -21,8 +21,16 @@ export class Convocation {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
   @IsNotEmpty()
   @IsArray()
+  @MinLength(1)
   @IsString({ each: true })
-  assignedUsers: User[]
+  invitedUsers: User[]
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+  @IsNotEmpty()
+  @IsArray()
+  @MinLength(1)
+  @IsString({ each: true })
+  selectedUsers: User[]
 
   @Prop({ default: AdjustDate(new Date(), AdjustDateUnit.DAYS, 7) })
   @IsDate()

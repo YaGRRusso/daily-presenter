@@ -13,16 +13,15 @@ import { Model } from 'mongoose'
 export class ConvocationsService {
   constructor(@InjectModel(Convocation.name) private ConvocationModel: Model<Convocation>) {}
 
-  async create(createConvocationDto: CreateConvocationDto) {
-    const newConvocation = new this.ConvocationModel(createConvocationDto)
-    return newConvocation.save()
-  }
+  private shuffleAndSlice = (array: any[], slice: number) =>
+    array.sort(() => 0.5 - Math.random()).slice(0, slice)
 
-  async findOneOrCreate(createConvocationDto: CreateConvocationDto) {
-    const convocation = await this.findOne({ key: createConvocationDto.key })
-    if (convocation) return convocation
-
-    const newConvocation = new this.ConvocationModel(createConvocationDto)
+  async create({ selectedUsers, selectedLength, ...createConvocationDto }: CreateConvocationDto) {
+    const randomizedUsers = this.shuffleAndSlice(selectedUsers, selectedLength)
+    const newConvocation = new this.ConvocationModel({
+      selectedUsers: randomizedUsers,
+      ...createConvocationDto,
+    })
     return newConvocation.save()
   }
 
@@ -34,6 +33,14 @@ export class ConvocationsService {
 
   async findOne(findConvocationDto?: FindConvocationDto) {
     return this.ConvocationModel.findOne(findConvocationDto).exec()
+  }
+
+  async findOneOrCreate(createConvocationDto: CreateConvocationDto) {
+    const convocation = await this.findOne({ key: createConvocationDto.key })
+    if (convocation) return convocation
+
+    const newConvocation = await this.create(createConvocationDto)
+    return newConvocation
   }
 
   async update(id: string, updateConvocationDto: UpdateConvocationDto) {
