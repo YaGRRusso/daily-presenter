@@ -6,7 +6,7 @@ import { ApplyMixins } from '@/common/helpers/mixins.helper'
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from 'class-validator'
 
 export class UserDto extends CommonDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   id: string
 

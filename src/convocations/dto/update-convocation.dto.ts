@@ -1,5 +1,5 @@
 import { CreateConvocationDto } from './create-convocation.dto'
 
-import { PartialType } from '@nestjs/mapped-types'
+import { PickType } from '@nestjs/mapped-types'
 
-export class UpdateConvocationDto extends PartialType(CreateConvocationDto) {}
+export class UpdateConvocationDto extends PickType(CreateConvocationDto, ['expiresAt', 'name']) {}

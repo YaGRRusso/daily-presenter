@@ -1,9 +1,9 @@
 import { CommonDto } from '@/common/dto/common.dto'
 
-import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
+import { IsArray, IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class ConvocationDto extends CommonDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   id: string
 
@@ -17,21 +17,19 @@ export class ConvocationDto extends CommonDto {
 
   @IsNotEmpty()
   @IsArray()
-  @MinLength(1)
   @IsString({ each: true })
   invitedUsers: string[]
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsArray()
-  @MinLength(1)
   @IsString({ each: true })
   selectedUsers: string[]
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   expiresAt: Date
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   createdBy: string
 }

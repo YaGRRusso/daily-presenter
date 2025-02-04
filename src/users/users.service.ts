@@ -16,9 +16,8 @@ export class UsersService {
   constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
 
   async create({ password, ...createUserDto }: CreateUserDto) {
-    delete createUserDto.role
     const hash = await bcrypt.hash(password, 8)
-    const newUser = new this.UserModel({ password: hash, role: RoleEnum.USER, ...createUserDto })
+    const newUser = new this.UserModel({ ...createUserDto, password: hash, role: RoleEnum.USER })
     return newUser.save()
   }
 

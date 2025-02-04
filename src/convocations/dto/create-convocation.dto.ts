@@ -1,9 +1,15 @@
 import { ConvocationDto } from './convocation.dto'
 
-import { IsNotEmpty, IsNumber } from 'class-validator'
+import { PickType } from '@nestjs/mapped-types'
+import { IsNumber, IsOptional } from 'class-validator'
 
-export class CreateConvocationDto extends ConvocationDto {
-  @IsNotEmpty()
+export class CreateConvocationDto extends PickType(ConvocationDto, [
+  'expiresAt',
+  'invitedUsers',
+  'key',
+  'name',
+]) {
+  @IsOptional()
   @IsNumber()
   selectedLength: number
 }

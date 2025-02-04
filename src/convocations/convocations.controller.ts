@@ -16,8 +16,8 @@ export class ConvocationsController {
   constructor(private readonly convocationsService: ConvocationsService) {}
 
   @Post()
-  create(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
-    return this.convocationsService.create({ createdBy: req.user.id, ...createConvocationDto })
+  findOneOrCreate(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
+    return this.convocationsService.findOneOrCreate(createConvocationDto, req.user)
   }
 
   @Get()
@@ -28,14 +28,6 @@ export class ConvocationsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.convocationsService.findOne({ id })
-  }
-
-  @Post('findOrCreate')
-  findOneOrCreate(@Req() req: AuthRequest, @Body() createConvocationDto: CreateConvocationDto) {
-    return this.convocationsService.findOneOrCreate({
-      createdBy: req.user.id,
-      ...createConvocationDto,
-    })
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
