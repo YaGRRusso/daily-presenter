@@ -43,3 +43,4 @@ export class Convocation {
 }
 
 export const ConvocationSchema = SchemaFactory.createForClass(Convocation)
+ConvocationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
