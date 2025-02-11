@@ -31,3 +31,24 @@ export function AdjustDate(referenceDate: Date, unit: AdjustDateUnit, value: num
 
   return adjustedDate
 }
+
+export function AdjustDateEasy(referenceDate: Date, str: string): Date {
+  const [value, unit] = str.split(' ')
+  if (!value || !unit) return referenceDate
+
+  const unitMap: { [key: string]: AdjustDateUnit } = {
+    day: AdjustDateUnit.DAYS,
+    year: AdjustDateUnit.YEARS,
+    month: AdjustDateUnit.MONTHS,
+    hour: AdjustDateUnit.HOURS,
+    minute: AdjustDateUnit.MINUTES,
+  }
+
+  for (const key in unitMap) {
+    if (unit.startsWith(key)) {
+      return AdjustDate(referenceDate, unitMap[key], parseInt(value))
+    }
+  }
+
+  return referenceDate
+}
