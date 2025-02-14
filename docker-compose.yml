@@ -1,0 +1,25 @@
+services:
+  db:
+    image: mongo:7-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - presenters:/data/db
+
+  backend:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=mongodb://db:27017/presenters
+      - JWT_SECRET=brigadeiro
+      - HOST=0.0.0.0
+      - PORT=8080
+    # env_file:
+    #   - .env
+    command: npm run start
+
+volumes:
+  presenters:
