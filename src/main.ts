@@ -19,7 +19,7 @@ import { NestFactory } from '@nestjs/core'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: [/(https?:[/]{2})?localhost:\d+/, /https:[/]{2}profile-info-panel.*\.vercel\.app/],
+      origin: [/(https?:[/]{2})?localhost:\d+/],
     },
   })
 
