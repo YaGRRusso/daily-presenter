@@ -1,8 +1,8 @@
-## Descrição
+# Daily Presenter
 
-Este projeto é uma aplicação backend desenvolvida com o framework [NestJS](https://nestjs.com/). Ele fornece uma API para gerenciar convocações e usuários, com autenticação JWT e controle de acesso baseado em funções.
+Este projeto é uma aplicação backend desenvolvida com o framework [NestJS](https://nestjs.com/). Ele fornece uma API para gerenciar e gerar convocações randomicas de usuários, com autenticação JWT, controle de acesso baseado em funções e segurança com hash de senha.
 
-### Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **NestJS**: Um framework Node.js para construir aplicações server-side eficientes e escaláveis. Utiliza TypeScript por padrão e é inspirado no Angular.
 - **Mongoose**: Uma biblioteca de modelagem de dados para MongoDB e Node.js. Facilita a interação com o banco de dados MongoDB.
@@ -10,139 +10,11 @@ Este projeto é uma aplicação backend desenvolvida com o framework [NestJS](ht
 - **Class Validator**: Biblioteca para validação de objetos JavaScript, utilizada para garantir que os dados recebidos nas requisições estejam no formato correto.
 - **Bcrypt**: Biblioteca para hashing de senhas, garantindo a segurança das senhas armazenadas no banco de dados.
 
-## Endpoints
+## Documentação Swagger
 
-### Autenticação
+Este projeto foi feito utilizando a biblioteca Swagger, que facilita a documentação de cada rota da aplicação incluindo tipagem de `Body`, `Parameter`, `Response` e `Header` de requisições.
 
-- **POST /auth**
-
-  - Descrição: Realiza o login do usuário.
-  - Corpo da Requisição:
-    ```json
-    {
-      "email": "string",
-      "password": "string"
-    }
-    ```
-  - Resposta: Token JWT.
-
-- **GET /auth/me**
-
-  - Descrição: Retorna as informações do usuário autenticado.
-  - Cabeçalho: `Authorization: Bearer <token>`
-
-- **GET /auth/manager**
-
-  - Descrição: Retorna a função do usuário autenticado se ele for um gerente.
-  - Cabeçalho: `Authorization: Bearer <token>`
-
-- **GET /auth/admin**
-
-  - Descrição: Retorna a função do usuário autenticado se ele for um administrador.
-  - Cabeçalho: `Authorization: Bearer <token>`
-
-- **GET /auth/super**
-  - Descrição: Retorna a função do usuário autenticado se ele for um super usuário.
-  - Cabeçalho: `Authorization: Bearer <token>`
-
-### Usuários
-
-- **POST /users**
-
-  - Descrição: Cria um novo usuário.
-  - Corpo da Requisição:
-    ```json
-    {
-      "username": "string",
-      "name": "string",
-      "email": "string",
-      "password": "string",
-      "avatar": "string (opcional)"
-    }
-    ```
-
-- **GET /users**
-
-  - Descrição: Retorna todos os usuários.
-  - Corpo da Requisição (opcional):
-    ```json
-    {
-      "username": "string (opcional)",
-      "name": "string (opcional)",
-      "email": "string (opcional)"
-    }
-    ```
-
-- **GET /users/:id**
-
-  - Descrição: Retorna um usuário pelo ID.
-
-- **PATCH /users**
-
-  - Descrição: Atualiza as informações do usuário autenticado.
-  - Cabeçalho: `Authorization: Bearer <token>`
-  - Corpo da Requisição:
-    ```json
-    {
-      "username": "string (opcional)",
-      "name": "string (opcional)",
-      "email": "string (opcional)",
-      "password": "string (opcional)",
-      "avatar": "string (opcional)"
-    }
-    ```
-
-- **DELETE /users**
-  - Descrição: Remove o usuário autenticado.
-  - Cabeçalho: `Authorization: Bearer <token>`
-
-### Convocações
-
-- **POST /convocations**
-
-  - Descrição: Cria uma nova convocação ou retorna uma existente.
-  - Cabeçalho: `Authorization: Bearer <token>`
-  - Corpo da Requisição:
-    ```json
-    {
-      "key": "string",
-      "name": "string",
-      "invitedUsers": ["string"],
-      "expiresAt": "string (opcional)",
-      "selectedLength": "number (opcional)"
-    }
-    ```
-
-- **GET /convocations**
-
-  - Descrição: Retorna todas as convocações.
-  - Corpo da Requisição (opcional):
-    ```json
-    {
-      "key": "string (opcional)",
-      "name": "string (opcional)"
-    }
-    ```
-
-- **GET /convocations/:id**
-
-  - Descrição: Retorna uma convocação pelo ID.
-
-- **PATCH /convocations/:id**
-
-  - Descrição: Atualiza uma convocação pelo ID.
-  - Cabeçalho: `Authorization: Bearer <token>`
-  - Corpo da Requisição:
-    ```json
-    {
-      "name": "string (opcional)",
-      "expiresAt": "string (opcional)"
-    }
-    ```
-
-- **DELETE /convocations/:id**
-  - Descrição: Remove uma convocação pelo ID.
-  - Cabeçalho: `Authorization: Bearer <token>`
+[**Acesse a documentação da API no Swagger**](http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000/swagger)
 
 ## Instalação
 
@@ -150,7 +22,7 @@ Este projeto é uma aplicação backend desenvolvida com o framework [NestJS](ht
 $ npm install
 ```
 
-## Executando a aplicação
+## Executando a Aplicação
 
 ```bash
 # desenvolvimento
@@ -162,6 +34,44 @@ $ npm run start:dev
 # produção
 $ npm run start:prod
 ```
+
+## Endpoints
+
+### Autenticação
+
+- **POST /auth**
+
+- **GET /auth/me**
+
+- **GET /auth/manager**
+
+- **GET /auth/admin**
+
+- **GET /auth/super**
+
+### Usuários
+
+- **POST /users**
+
+- **GET /users**
+
+- **GET /users/:id**
+
+- **PATCH /users**
+
+- **DELETE /users**
+
+### Convocações
+
+- **POST /convocations**
+
+- **GET /convocations**
+
+- **GET /convocations/:id**
+
+- **PATCH /convocations/:id**
+
+- **DELETE /convocations/:id**
 
 ## Licença
 

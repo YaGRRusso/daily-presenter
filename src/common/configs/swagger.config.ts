@@ -4,7 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 export const swaggerConfig = (app: INestApplication) => {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Daily Presenter')
-    .setDescription('Api de randomização de usuários baseado em chaves')
+    .setDescription(
+      'API para gerenciar e gerar convocações randomicas de usuários, com autenticação JWT, controle de acesso baseado em funções e segurança com hash de senha.',
+    )
     .setVersion('1.0')
     .addTag('App')
     .addTag('Auth')
