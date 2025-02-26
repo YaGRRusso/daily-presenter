@@ -1,6 +1,6 @@
 import { UserDto } from '@/users/dto/user.dto'
 
-import { PickType } from '@nestjs/mapped-types'
+import { PickType } from '@nestjs/swagger'
 
 export class LoginUserDto extends PickType(UserDto, ['email', 'password']) {}
 

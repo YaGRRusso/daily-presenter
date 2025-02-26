@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsString } from 'class-validator'
 
 export enum RoleEnum {
@@ -8,6 +9,7 @@ export enum RoleEnum {
 }
 
 export class RoleDto {
+  @ApiProperty()
   @IsString()
   @IsEnum(RoleEnum)
   role: RoleEnum

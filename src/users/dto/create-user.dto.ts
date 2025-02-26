@@ -1,6 +1,6 @@
 import { UserDto } from './user.dto'
 
-import { PickType } from '@nestjs/mapped-types'
+import { PickType } from '@nestjs/swagger'
 
 export class CreateUserDto extends PickType(UserDto, [
   'avatar',
