@@ -11,15 +11,15 @@ services:
       - db
     build: .
     ports:
-      - "8080:8080"
+      - "3000:3000"
     environment:
       - DATABASE_URL=mongodb://db:27017/presenters
       - JWT_SECRET=brigadeiro
       - HOST=0.0.0.0
-      - PORT=8080
+      - PORT=3000
     # env_file:
     #   - .env
-    command: npm run start
+    command: npm run start:prod
 
 volumes:
   presenters:
