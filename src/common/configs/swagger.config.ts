@@ -6,9 +6,10 @@ export const swaggerConfig = (app: INestApplication) => {
     .setTitle('Daily Presenter')
     .setDescription('Api de randomização de usuários baseado em chaves')
     .setVersion('1.0')
-    .addTag('auth')
-    .addTag('users')
-    .addTag('convocations')
+    .addTag('App')
+    .addTag('Auth')
+    .addTag('Users')
+    .addTag('Convocations')
 
     .build()
   const document = SwaggerModule.createDocument(app, swaggerConfig)
