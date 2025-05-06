@@ -1,8 +1,12 @@
 {
   "editor.tabSize": 2,
   "eslint.format.enable": true,
+  "material-icon-theme.activeIconPack": "nest",
+  "[typescript]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[typescriptreact]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[javascript]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[javascriptreact]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  },
-  "material-icon-theme.activeIconPack": "nest"
+  }
 }
