@@ -37,6 +37,12 @@ export class ConvocationsController {
   }
 
   @ApiResponse({ status: 200, type: ConvocationDto })
+  @Get('key/:key')
+  findOneByKey(@Param('key') key: string) {
+    return this.convocationsService.findOne({ key })
+  }
+
+  @ApiResponse({ status: 200, type: ConvocationDto })
   @UseGuards(JwtAuthGuard, RoleGuard)
   @NeedRole(RoleEnum.ADMIN, RoleEnum.SUPER)
   @Patch(':id')
