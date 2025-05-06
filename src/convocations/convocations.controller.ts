@@ -38,7 +38,7 @@ export class ConvocationsController {
 
   @ApiResponse({ status: 200, type: ConvocationDto })
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @NeedRole(RoleEnum.ADMIN)
+  @NeedRole(RoleEnum.ADMIN, RoleEnum.SUPER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateConvocationDto: UpdateConvocationDto) {
     return this.convocationsService.update(id, updateConvocationDto)
@@ -46,7 +46,7 @@ export class ConvocationsController {
 
   @ApiResponse({ status: 200, type: Boolean })
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @NeedRole(RoleEnum.ADMIN)
+  @NeedRole(RoleEnum.ADMIN, RoleEnum.SUPER)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.convocationsService.remove(id)

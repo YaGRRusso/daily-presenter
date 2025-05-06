@@ -1,4 +1,7 @@
+import { ROLE_KEY } from '../decorators/role.decorator' // Importar ROLE_KEY
 import { AuthRequest } from '../entities/request.entity'
+
+import { RoleEnum } from '@/common/dto/role.dto'
 
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
@@ -9,12 +12,15 @@ export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const requiredRole = this.reflector.get('role', context.getHandler())
-    if (!requiredRole) return true
+    const requiredRoles = this.reflector.getAllAndOverride<RoleEnum[]>(ROLE_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ])
+
+    if (!requiredRoles || requiredRoles.length === 0) return true
 
     const { user } = context.switchToHttp().getRequest() as AuthRequest
-
-    if (user.role === requiredRole) return true
+    if (requiredRoles.some((role) => user.role === role)) return true
 
     throw new UnauthorizedException()
   }
