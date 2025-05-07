@@ -4,6 +4,7 @@ import { CreateConvocationDto } from './dto/create-convocation.dto'
 import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
+import { IsPublic } from '@/auth/decorators/public.decorator'
 import { NeedRole } from '@/auth/decorators/role.decorator'
 import { AuthRequest } from '@/auth/entities/request.entity'
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard'
@@ -25,18 +26,21 @@ export class ConvocationsController {
   }
 
   @ApiResponse({ status: 200, type: ConvocationDto })
+  @IsPublic()
   @Get()
   findAll(@Body() findConvocationDto: FindConvocationDto) {
     return this.convocationsService.findAll(findConvocationDto)
   }
 
   @ApiResponse({ status: 200, type: ConvocationDto })
+  @IsPublic()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.convocationsService.findOne({ id })
   }
 
   @ApiResponse({ status: 200, type: ConvocationDto })
+  @IsPublic()
   @Get('key/:key')
   findOneByKey(@Param('key') key: string) {
     return this.convocationsService.findOne({ key })
