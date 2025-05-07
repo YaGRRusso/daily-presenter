@@ -76,16 +76,16 @@ export class ConvocationsService {
 
     const convocation = await newConvocation.save()
     return convocation.populate([
-      { path: 'invitedUsers', select: ['username', 'name', 'email'] },
-      { path: 'selectedUsers', select: ['username', 'name', 'email'] },
+      { path: 'invitedUsers', select: ['username'] },
+      { path: 'selectedUsers', select: ['username'] },
     ])
   }
 
   async findAll(findConvocationDto?: FindConvocationDto, method?: QueryMethod) {
     return this.ConvocationModel.find(ApplyQuery(findConvocationDto, method))
       .populate([
-        { path: 'invitedUsers', select: ['username', 'name', 'email'] },
-        { path: 'selectedUsers', select: ['username', 'name', 'email'] },
+        { path: 'invitedUsers', select: ['username'] },
+        { path: 'selectedUsers', select: ['username'] },
       ])
       .exec()
   }
@@ -93,8 +93,8 @@ export class ConvocationsService {
   async findOne(findConvocationDto?: FindConvocationDto) {
     return this.ConvocationModel.findOne(findConvocationDto)
       .populate([
-        { path: 'invitedUsers', select: ['username', 'name', 'email'] },
-        { path: 'selectedUsers', select: ['username', 'name', 'email'] },
+        { path: 'invitedUsers', select: ['username'] },
+        { path: 'selectedUsers', select: ['username'] },
       ])
       .exec()
   }
