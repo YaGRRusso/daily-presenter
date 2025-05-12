@@ -39,39 +39,57 @@ $ npm run start:prod
 
 ### Autenticação
 
-- **POST /auth**
+- **POST /auth**  
+  Realiza o login do usuário e retorna um token JWT.
 
-- **GET /auth/me**
+- **GET /auth/me**  
+  Retorna os dados do usuário autenticado.
 
-- **GET /auth/manager**
+- **GET /auth/manager**  
+  Retorna o papel do usuário, acessível apenas para usuários com papel de gerente (manager) ou superior.
 
-- **GET /auth/admin**
+- **GET /auth/admin**  
+  Retorna o papel do usuário, acessível apenas para administradores (admin) ou superior.
 
-- **GET /auth/super**
+- **GET /auth/super**  
+  Retorna o papel do usuário, acessível apenas para super administradores (super).
 
 ### Usuários
 
-- **POST /users**
+- **POST /users**  
+  Cria um novo usuário.
 
-- **GET /users**
+- **GET /users**  
+  Lista todos os usuários cadastrados.
 
-- **GET /users/:id**
+- **GET /users/:id**  
+  Busca um usuário pelo seu ID.
 
-- **PATCH /users**
+- **PATCH /users/me**  
+  Atualiza os dados do usuário autenticado.
 
-- **DELETE /users**
+- **DELETE /users/me**  
+  Remove o usuário autenticado do sistema.
 
 ### Convocações
 
-- **POST /convocations**
+- **POST /convocations**  
+  Cria uma nova convocação ou retorna uma existente com a mesma chave.
 
-- **GET /convocations**
+- **GET /convocations**  
+  Lista todas as convocações.
 
-- **GET /convocations/:id**
+- **GET /convocations/:id**  
+  Busca uma convocação pelo seu ID.
 
-- **PATCH /convocations/:id**
+- **GET /convocations/key/:id**  
+  Busca uma convocação pela sua chave única.
 
-- **DELETE /convocations/:id**
+- **PATCH /convocations/:id**  
+  Atualiza os dados de uma convocação (apenas admin ou super).
+
+- **DELETE /convocations/:id**  
+  Remove uma convocação (apenas admin ou super).
 
 ## Licença
 
