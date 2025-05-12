@@ -37,7 +37,7 @@ export class ConvocationDto extends CommonDto {
   expiresAt: Date
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   createdBy: string
 }

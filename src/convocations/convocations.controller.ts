@@ -27,6 +27,13 @@ export class ConvocationsController {
 
   @ApiResponse({ status: 200, type: ConvocationDto })
   @IsPublic()
+  @Post('public')
+  findOneOrCreatePublic(@Body() createConvocationDto: CreateConvocationDto) {
+    return this.convocationsService.findOneOrCreate(createConvocationDto)
+  }
+
+  @ApiResponse({ status: 200, type: ConvocationDto })
+  @IsPublic()
   @Get()
   findAll(@Body() findConvocationDto: FindConvocationDto) {
     return this.convocationsService.findAll(findConvocationDto)

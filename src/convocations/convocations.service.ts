@@ -62,7 +62,7 @@ export class ConvocationsService {
 
   async create(
     { selectedLength, expiresAt, ...createConvocationDto }: CreateConvocationDto,
-    user: JwtUser,
+    { id }: JwtUser,
   ) {
     const randomizedUsers = this.shuffleAndSlice(createConvocationDto.invitedUsers, selectedLength)
     const parsedExpiresAt = this.parseDate(expiresAt).toISOString()
@@ -71,7 +71,7 @@ export class ConvocationsService {
       ...createConvocationDto,
       selectedUsers: randomizedUsers,
       expiresAt: parsedExpiresAt,
-      createdBy: user.id,
+      createdBy: id,
     })
 
     const convocation = await newConvocation.save()
@@ -102,7 +102,7 @@ export class ConvocationsService {
       .exec()
   }
 
-  async findOneOrCreate(createConvocationDto: CreateConvocationDto, user: JwtUser) {
+  async findOneOrCreate(createConvocationDto: CreateConvocationDto, user?: JwtUser) {
     const convocation = await this.findOne({ key: createConvocationDto.key })
     if (convocation) return convocation
 

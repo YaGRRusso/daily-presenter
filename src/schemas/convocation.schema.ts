@@ -3,7 +3,7 @@ import { User } from './user.schema'
 import { AdjustDate, AdjustDateUnit } from '@/common/helpers/date.helper'
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsArray, IsDate, IsNotEmpty, IsString, MinLength } from 'class-validator'
+import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
 import mongoose from 'mongoose'
 
 @Schema({ timestamps: true })
@@ -37,7 +37,7 @@ export class Convocation {
   expiresAt: Date
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   createdBy: User
 }
