@@ -78,6 +78,7 @@ export class ConvocationsService {
     return convocation.populate([
       { path: 'invitedUsers', select: ['username'] },
       { path: 'selectedUsers', select: ['username'] },
+      { path: 'createdBy', select: ['username'] },
     ])
   }
 
@@ -86,6 +87,7 @@ export class ConvocationsService {
       .populate([
         { path: 'invitedUsers', select: ['username'] },
         { path: 'selectedUsers', select: ['username'] },
+        { path: 'createdBy', select: ['username'] },
       ])
       .exec()
   }
@@ -95,6 +97,7 @@ export class ConvocationsService {
       .populate([
         { path: 'invitedUsers', select: ['username'] },
         { path: 'selectedUsers', select: ['username'] },
+        { path: 'createdBy', select: ['username'] },
       ])
       .exec()
   }
