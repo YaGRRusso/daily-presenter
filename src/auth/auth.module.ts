@@ -14,7 +14,7 @@ config()
     UsersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7d' },
+      signOptions: { expiresIn: '180d' },
     }),
   ],
   controllers: [AuthController],
