@@ -29,4 +29,5 @@ jobs:
             git pull
             npm install --production
             npm run build
-            pm2 restart all || npm run start:prod & EOF
+            pm2 restart all || npm run start:prod &
+          EOF
