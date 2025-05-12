@@ -32,14 +32,6 @@ export class AuthController {
 
   @ApiResponse({ status: 200, type: RoleDto })
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @NeedRole(RoleEnum.MANAGER)
-  @Get('manager')
-  async manager(@Req() req: AuthRequest) {
-    return req.user.role
-  }
-
-  @ApiResponse({ status: 200, type: RoleDto })
-  @UseGuards(JwtAuthGuard, RoleGuard)
   @NeedRole(RoleEnum.ADMIN)
   @Get('admin')
   async admin(@Req() req: AuthRequest) {
