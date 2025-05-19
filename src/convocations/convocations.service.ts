@@ -5,6 +5,7 @@ import { UpdateConvocationDto } from './dto/update-convocation.dto'
 import { JwtUser } from '@/auth/entities/user.entity'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { Convocation } from '@/schemas/convocation.schema'
+import { User } from '@/schemas/user.schema'
 import { UsersService } from '@/users/users.service'
 
 import { Injectable } from '@nestjs/common'
@@ -166,7 +167,7 @@ export class ConvocationsService {
       user,
     )
 
-    const generateList = (users: any[]) => {
+    const generateList = (users: User[]) => {
       return users.map((user, index) => {
         const day = new Date(today)
         day.setDate(today.getDate() + index)
@@ -177,7 +178,7 @@ export class ConvocationsService {
         const dayName = daysOfWeek[dayNumber]
         const formattedDate = `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`
 
-        return `- ${dayName} (${formattedDate}): ${user.username}`
+        return `- ${dayName} (${formattedDate}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
       })
     }
 
