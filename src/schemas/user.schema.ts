@@ -49,6 +49,11 @@ export class User {
   @IsString()
   @IsEnum(RoleEnum)
   role?: RoleEnum
+
+  @Prop()
+  @IsOptional()
+  @IsString()
+  slackId?: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

@@ -2,6 +2,7 @@ import { ConvocationsController } from './convocations.controller'
 import { ConvocationsService } from './convocations.service'
 
 import { Convocation, ConvocationSchema } from '@/schemas/convocation.schema'
+import { UsersModule } from '@/users/users.module'
 
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
@@ -12,7 +13,10 @@ import { MongooseModule } from '@nestjs/mongoose'
 // exports: [UsersService],
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Convocation.name, schema: ConvocationSchema }])],
+  imports: [
+    UsersModule,
+    MongooseModule.forFeature([{ name: Convocation.name, schema: ConvocationSchema }]),
+  ],
   controllers: [ConvocationsController],
   providers: [ConvocationsService],
 })

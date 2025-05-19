@@ -5,6 +5,7 @@ import { UpdateConvocationDto } from './dto/update-convocation.dto'
 import { JwtUser } from '@/auth/entities/user.entity'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { Convocation } from '@/schemas/convocation.schema'
+import { UsersService } from '@/users/users.service'
 
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
@@ -12,10 +13,14 @@ import { Model } from 'mongoose'
 
 @Injectable()
 export class ConvocationsService {
-  constructor(@InjectModel(Convocation.name) private ConvocationModel: Model<Convocation>) {}
+  constructor(
+    @InjectModel(Convocation.name) private ConvocationModel: Model<Convocation>,
+    private readonly usersService: UsersService,
+  ) {}
 
-  private shuffleAndSlice = (array: any[], slice?: number) =>
-    array.sort(() => 0.5 - Math.random()).slice(0, slice ?? array.length)
+  private shuffleAndSlice = (array: any[], slice?: number) => {
+    return array.sort(() => 0.5 - Math.random()).slice(0, slice ?? array.length)
+  }
 
   private parseDate(input: string | Date): Date {
     if (input instanceof Date) return input
@@ -62,7 +67,7 @@ export class ConvocationsService {
 
   async create(
     { selectedLength, expiresAt, ...createConvocationDto }: CreateConvocationDto,
-    { id }: JwtUser,
+    user?: JwtUser,
   ) {
     const randomizedUsers = this.shuffleAndSlice(createConvocationDto.invitedUsers, selectedLength)
     const parsedExpiresAt = this.parseDate(expiresAt).toISOString()
@@ -71,13 +76,13 @@ export class ConvocationsService {
       ...createConvocationDto,
       selectedUsers: randomizedUsers,
       expiresAt: parsedExpiresAt,
-      createdBy: id,
+      createdBy: user?.id,
     })
 
     const convocation = await newConvocation.save()
     return convocation.populate([
+      { path: 'selectedUsers', select: ['username', 'slackId'] },
       { path: 'invitedUsers', select: ['username'] },
-      { path: 'selectedUsers', select: ['username'] },
       { path: 'createdBy', select: ['username'] },
     ])
   }
@@ -85,8 +90,8 @@ export class ConvocationsService {
   async findAll(findConvocationDto?: FindConvocationDto, method?: QueryMethod) {
     return this.ConvocationModel.find(ApplyQuery(findConvocationDto, method))
       .populate([
+        { path: 'selectedUsers', select: ['username', 'slackId'] },
         { path: 'invitedUsers', select: ['username'] },
-        { path: 'selectedUsers', select: ['username'] },
         { path: 'createdBy', select: ['username'] },
       ])
       .exec()
@@ -95,8 +100,8 @@ export class ConvocationsService {
   async findOne(findConvocationDto?: FindConvocationDto) {
     return this.ConvocationModel.findOne(findConvocationDto)
       .populate([
+        { path: 'selectedUsers', select: ['username', 'slackId'] },
         { path: 'invitedUsers', select: ['username'] },
-        { path: 'selectedUsers', select: ['username'] },
         { path: 'createdBy', select: ['username'] },
       ])
       .exec()
@@ -116,5 +121,127 @@ export class ConvocationsService {
 
   async remove(id: string) {
     return this.ConvocationModel.deleteOne({ _id: id }).exec()
+  }
+
+  async slack(user?: JwtUser) {
+    const today = new Date()
+    const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000/convocations/key'
+
+    const daysOfWeek = [
+      'domingo',
+      'segunda-feira',
+      'terça-feira',
+      'quarta-feira',
+      'quinta-feira',
+      'sexta-feira',
+      'sábado',
+    ]
+
+    const users = await this.usersService.findAll()
+    const invitedUsers = users.map((user) => user.id)
+    const selectedLength = 6 - today.getDay()
+    const expiresAt = selectedLength + 'd'
+
+    const presenterKey = 'week-presenter'
+    const presenter = await this.findOneOrCreate(
+      {
+        invitedUsers,
+        selectedLength,
+        expiresAt,
+        key: presenterKey,
+        name: 'Presenter Convocation',
+      },
+      user,
+    )
+
+    const curiosityKey = 'week-curiosity'
+    const curiosity = await this.findOneOrCreate(
+      {
+        invitedUsers,
+        selectedLength,
+        expiresAt,
+        key: curiosityKey,
+        name: 'Curiosity Convocation',
+      },
+      user,
+    )
+
+    const generateList = (users: any[]) => {
+      return users.map((user, index) => {
+        const day = new Date(today)
+        day.setDate(today.getDate() + index)
+
+        const dayNumber = day.getDay()
+        if (dayNumber === 0 || dayNumber === 6) return
+
+        const dayName = daysOfWeek[dayNumber]
+        const formattedDate = `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`
+
+        return `- ${dayName} (${formattedDate}): ${user.username}`
+      })
+    }
+
+    const presentersList = generateList(presenter.selectedUsers)
+    const curiositiesList = generateList(curiosity.selectedUsers)
+
+    return {
+      response_type: 'in_channel',
+      blocks: [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: 'Apresentadores da Daily',
+          },
+        },
+        {
+          type: 'divider',
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: ['Escolhidos para apresentar', ...presentersList].join('\n'),
+          },
+          accessory: {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Detalhes',
+            },
+            value: 'presenter_details',
+            url: [baseUrl, presenterKey].join('/'),
+            action_id: 'button-action-presenter',
+          },
+        },
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: 'Curiosidades da Daily',
+          },
+        },
+        {
+          type: 'divider',
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: ['Escolhidos para compartilhar curiosidades', ...curiositiesList].join('\n'),
+          },
+          accessory: {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Detalhes',
+            },
+            value: 'curiosity_details',
+            url: [baseUrl, curiosityKey].join('/'),
+            action_id: 'button-action-curiosity',
+          },
+        },
+      ],
+    }
   }
 }

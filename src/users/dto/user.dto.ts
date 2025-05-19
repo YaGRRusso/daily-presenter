@@ -13,6 +13,11 @@ export class UserDto extends CommonDto {
   id: string
 
   @ApiProperty()
+  @IsOptional()
+  @IsString()
+  slackId?: string
+
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   username: string

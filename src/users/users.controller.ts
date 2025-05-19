@@ -21,13 +21,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({ status: 200, type: UserDto })
-  @Post()
   @IsPublic()
+  @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto)
   }
 
   @ApiResponse({ status: 200, type: UserDto })
+  @IsPublic()
   @Get()
   findAll(@Body() findUserDto: FindUserDto) {
     return this.usersService.findAll(findUserDto, QueryMethod.AND)

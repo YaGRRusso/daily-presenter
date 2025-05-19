@@ -27,13 +27,6 @@ export class ConvocationsController {
 
   @ApiResponse({ status: 200, type: ConvocationDto })
   @IsPublic()
-  @Post('public')
-  findOneOrCreatePublic(@Body() createConvocationDto: CreateConvocationDto) {
-    return this.convocationsService.findOneOrCreate(createConvocationDto)
-  }
-
-  @ApiResponse({ status: 200, type: ConvocationDto })
-  @IsPublic()
   @Get()
   findAll(@Body() findConvocationDto: FindConvocationDto) {
     return this.convocationsService.findAll(findConvocationDto)
@@ -67,5 +60,12 @@ export class ConvocationsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.convocationsService.remove(id)
+  }
+
+  @ApiResponse({ status: 200, type: ConvocationDto })
+  @IsPublic()
+  @Post('/slack')
+  slack() {
+    return this.convocationsService.slack()
   }
 }
