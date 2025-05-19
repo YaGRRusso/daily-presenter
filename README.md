@@ -35,62 +35,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Endpoints
-
-### Autenticação
-
-- **POST /auth**  
-  Realiza o login do usuário e retorna um token JWT.
-
-- **GET /auth/me**  
-  Retorna os dados do usuário autenticado.
-
-- **GET /auth/manager**  
-  Retorna o papel do usuário, acessível apenas para usuários com papel de gerente (manager) ou superior.
-
-- **GET /auth/admin**  
-  Retorna o papel do usuário, acessível apenas para administradores (admin) ou superior.
-
-- **GET /auth/super**  
-  Retorna o papel do usuário, acessível apenas para super administradores (super).
-
-### Usuários
-
-- **POST /users**  
-  Cria um novo usuário.
-
-- **GET /users**  
-  Lista todos os usuários cadastrados.
-
-- **GET /users/:id**  
-  Busca um usuário pelo seu ID.
-
-- **PATCH /users/me**  
-  Atualiza os dados do usuário autenticado.
-
-- **DELETE /users/me**  
-  Remove o usuário autenticado do sistema.
-
-### Convocações
-
-- **POST /convocations**  
-  Cria uma nova convocação ou retorna uma existente com a mesma chave.
-
-- **GET /convocations**  
-  Lista todas as convocações.
-
-- **GET /convocations/:id**  
-  Busca uma convocação pelo seu ID.
-
-- **GET /convocations/key/:id**  
-  Busca uma convocação pela sua chave única.
-
-- **PATCH /convocations/:id**  
-  Atualiza os dados de uma convocação (apenas admin ou super).
-
-- **DELETE /convocations/:id**  
-  Remove uma convocação (apenas admin ou super).
-
 ## Licença
 
 Nest é licenciado pelo MIT.

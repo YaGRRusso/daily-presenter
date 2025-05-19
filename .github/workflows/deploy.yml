@@ -27,7 +27,7 @@ jobs:
           ssh ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
             cd daily-presenter
             git pull
-            npm install --production
+            npm install
             npm run build
-            pm2 restart all || npm run start:prod &
+            pm2 restart all &
           EOF

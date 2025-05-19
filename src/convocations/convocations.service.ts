@@ -201,17 +201,11 @@ export class ConvocationsService {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: ['Escolhidos para apresentar', ...presentersList].join('\n'),
-          },
-          accessory: {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Detalhes',
-            },
-            value: 'presenter_details',
-            url: [baseUrl, presenterKey].join('/'),
-            action_id: 'button-action-presenter',
+            text: [
+              'Escolhidos para apresentar',
+              ...presentersList,
+              `_<${[baseUrl, curiosityKey].join('/')}|ver detalhes>_`,
+            ].join('\n'),
           },
         },
         {
@@ -228,17 +222,11 @@ export class ConvocationsService {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: ['Escolhidos para compartilhar curiosidades', ...curiositiesList].join('\n'),
-          },
-          accessory: {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Detalhes',
-            },
-            value: 'curiosity_details',
-            url: [baseUrl, curiosityKey].join('/'),
-            action_id: 'button-action-curiosity',
+            text: [
+              'Escolhidos para compartilhar curiosidades',
+              ...curiositiesList,
+              `_<${[baseUrl, curiosityKey].join('/')}|ver detalhes>_`,
+            ].join('\n'),
           },
         },
       ],
