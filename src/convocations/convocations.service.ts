@@ -3,7 +3,7 @@ import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
 import { JwtUser } from '@/auth/entities/user.entity'
-import { AdjustDateEasy } from '@/common/helpers/date.helper'
+import { AdjustDateEasy, CurrentWeekDays } from '@/common/helpers/date.helper'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { Convocation } from '@/schemas/convocation.schema'
 import { User } from '@/schemas/user.schema'
@@ -32,7 +32,7 @@ export class ConvocationsService {
       [...createConvocationDto.invitedUsers],
       selectedLength,
     )
-    const parsedExpiresAt = AdjustDateEasy(expiresAt).toISOString()
+    const parsedExpiresAt = expiresAt instanceof Date ? expiresAt : AdjustDateEasy(expiresAt)
 
     const newConvocation = new this.ConvocationModel({
       ...createConvocationDto,
@@ -86,31 +86,20 @@ export class ConvocationsService {
   }
 
   async slack(user?: JwtUser) {
-    const today = new Date()
+    const currentWeekDays = CurrentWeekDays()
     const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000/convocations/key'
-
-    const daysOfWeek = [
-      'domingo',
-      'segunda-feira',
-      'terça-feira',
-      'quarta-feira',
-      'quinta-feira',
-      'sexta-feira',
-      'sábado',
-    ]
 
     const users = await this.usersService.findAll()
     const invitedUsers = users.map((user) => user.id)
-    const selectedLength = 6 - today.getDay()
-    const expiresAt = selectedLength + 'd'
+    const expiresAt = currentWeekDays[6].date
 
     const presenterKey = 'week-presenter'
     const presenter = await this.findOneOrCreate(
       {
         name: 'Presenter Convocation',
         key: presenterKey,
+        selectedLength: 5,
         invitedUsers,
-        selectedLength,
         expiresAt,
       },
       user,
@@ -121,8 +110,8 @@ export class ConvocationsService {
       {
         name: 'Curiosity Convocation',
         key: curiosityKey,
+        selectedLength: 5,
         invitedUsers,
-        selectedLength,
         expiresAt,
       },
       user,
@@ -130,16 +119,8 @@ export class ConvocationsService {
 
     const generateList = (users: User[]) => {
       return users.map((user, index) => {
-        const day = new Date(today)
-        day.setDate(today.getDate() + index)
-
-        const dayNumber = day.getDay()
-        if (dayNumber === 0 || dayNumber === 6) return
-
-        const dayName = daysOfWeek[dayNumber]
-        const formattedDate = `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`
-
-        return `- ${dayName} (${formattedDate}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
+        const { day, date } = currentWeekDays[index + 1]
+        return `- ${day} (${date.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
       })
     }
 

@@ -1,7 +1,7 @@
 import { CommonDto } from '@/common/dto/common.dto'
 
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class ConvocationDto extends CommonDto {
   @ApiProperty()
@@ -33,8 +33,8 @@ export class ConvocationDto extends CommonDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  expiresAt: string
+  @IsDateString()
+  expiresAt: string | Date
 
   @ApiProperty()
   @IsOptional()
