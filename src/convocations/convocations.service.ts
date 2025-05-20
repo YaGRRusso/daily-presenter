@@ -142,7 +142,7 @@ export class ConvocationsService {
           text: {
             type: 'mrkdwn',
             text: [
-              'Escolhidos para apresentar',
+              'Escolhidos para apresentar o board:',
               ...presentersList,
               `_<${[baseUrl, 'convocations/key', presenterKey].join('/')}|ver detalhes>_`,
             ].join('\n'),
@@ -163,7 +163,7 @@ export class ConvocationsService {
           text: {
             type: 'mrkdwn',
             text: [
-              'Escolhidos para compartilhar curiosidades',
+              'Escolhidos para compartilhar curiosidades:',
               ...curiositiesList,
               `_<${[baseUrl, 'convocations/key', curiosityKey].join('/')}|ver detalhes>_`,
             ].join('\n'),
