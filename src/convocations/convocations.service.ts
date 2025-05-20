@@ -120,7 +120,7 @@ export class ConvocationsService {
     const generateList = (users: User[]) => {
       return users.map((user, index) => {
         const { day, date } = currentWeekDays[index + 1]
-        return `- ${day} (${date.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
+        return `- ${day} (${date.toLocaleDateString('pt', { day: '2-digit', month: '2-digit' })}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
       })
     }
 
