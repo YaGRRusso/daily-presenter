@@ -3,6 +3,7 @@ import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
 import { JwtUser } from '@/auth/entities/user.entity'
+import { AdjustDateEasy } from '@/common/helpers/date.helper'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { Convocation } from '@/schemas/convocation.schema'
 import { User } from '@/schemas/user.schema'
@@ -23,55 +24,12 @@ export class ConvocationsService {
     return array.sort(() => 0.5 - Math.random()).slice(0, slice ?? array.length)
   }
 
-  private parseDate(input: string | Date): Date {
-    if (input instanceof Date) return input
-
-    const relativeDateRegex = /^([+-]?)(\d+)([hdmy])$/
-
-    if (!relativeDateRegex.test(input)) {
-      const potentialAbsoluteDate = new Date(input)
-      if (!isNaN(potentialAbsoluteDate.getTime())) {
-        return potentialAbsoluteDate
-      }
-    }
-
-    const match = input.match(relativeDateRegex)
-    const date = new Date()
-
-    if (match) {
-      const sign = match[1]
-      let value = parseInt(match[2], 10)
-      const unit = match[3]
-
-      if (sign === '-') value = -value
-
-      switch (unit) {
-        case 'h':
-          date.setHours(date.getHours() + value)
-          break
-        case 'd':
-          date.setDate(date.getDate() + value)
-          break
-        case 'm':
-          date.setMonth(date.getMonth() + value)
-          break
-        case 'y':
-          date.setFullYear(date.getFullYear() + value)
-          break
-        default:
-          throw new Error('Invalid unit for relative date.')
-      }
-    }
-
-    return date
-  }
-
   async create(
     { selectedLength, expiresAt, ...createConvocationDto }: CreateConvocationDto,
     user?: JwtUser,
   ) {
     const randomizedUsers = this.shuffleAndSlice(createConvocationDto.invitedUsers, selectedLength)
-    const parsedExpiresAt = this.parseDate(expiresAt).toISOString()
+    const parsedExpiresAt = AdjustDateEasy(expiresAt).toISOString()
 
     const newConvocation = new this.ConvocationModel({
       ...createConvocationDto,
@@ -146,11 +104,11 @@ export class ConvocationsService {
     const presenterKey = 'week-presenter'
     const presenter = await this.findOneOrCreate(
       {
+        name: 'Presenter Convocation',
+        key: presenterKey,
         invitedUsers,
         selectedLength,
         expiresAt,
-        key: presenterKey,
-        name: 'Presenter Convocation',
       },
       user,
     )
@@ -158,11 +116,11 @@ export class ConvocationsService {
     const curiosityKey = 'week-curiosity'
     const curiosity = await this.findOneOrCreate(
       {
+        name: 'Curiosity Convocation',
+        key: curiosityKey,
         invitedUsers,
         selectedLength,
         expiresAt,
-        key: curiosityKey,
-        name: 'Curiosity Convocation',
       },
       user,
     )
@@ -196,9 +154,6 @@ export class ConvocationsService {
           },
         },
         {
-          type: 'divider',
-        },
-        {
           type: 'section',
           text: {
             type: 'mrkdwn',
@@ -210,14 +165,14 @@ export class ConvocationsService {
           },
         },
         {
+          type: 'divider',
+        },
+        {
           type: 'header',
           text: {
             type: 'plain_text',
             text: 'Curiosidades da Daily',
           },
-        },
-        {
-          type: 'divider',
         },
         {
           type: 'section',

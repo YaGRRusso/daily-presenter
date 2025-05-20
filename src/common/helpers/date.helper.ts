@@ -1,13 +1,12 @@
 export enum AdjustDateUnit {
-  YEARS = 'years',
-  MONTHS = 'months',
-  DAYS = 'days',
-  HOURS = 'hours',
-  MINUTES = 'minutes',
+  YEARS = 'y',
+  MONTHS = 'm',
+  DAYS = 'd',
+  HOURS = 'h',
 }
 
-export function AdjustDate(referenceDate: Date, unit: AdjustDateUnit, value: number): Date {
-  const adjustedDate = new Date(referenceDate)
+export function AdjustDate(value: number, unit: AdjustDateUnit, referenceDate?: Date): Date {
+  const adjustedDate = referenceDate ? new Date(referenceDate) : new Date()
 
   switch (unit) {
     case AdjustDateUnit.YEARS:
@@ -22,9 +21,6 @@ export function AdjustDate(referenceDate: Date, unit: AdjustDateUnit, value: num
     case AdjustDateUnit.HOURS:
       adjustedDate.setHours(adjustedDate.getHours() + value)
       break
-    case AdjustDateUnit.MINUTES:
-      adjustedDate.setMinutes(adjustedDate.getMinutes() + value)
-      break
     default:
       return referenceDate
   }
@@ -32,23 +28,27 @@ export function AdjustDate(referenceDate: Date, unit: AdjustDateUnit, value: num
   return adjustedDate
 }
 
-export function AdjustDateEasy(referenceDate: Date, str: string): Date {
-  const [value, unit] = str.split(' ')
-  if (!value || !unit) return referenceDate
+export function AdjustDateEasy(input: string, referenceDate?: Date): Date {
+  const regex = /^([+-]?)(\d+)([hdmy])$/
+  const match = input.match(regex)
 
-  const unitMap: { [key: string]: AdjustDateUnit } = {
-    day: AdjustDateUnit.DAYS,
-    year: AdjustDateUnit.YEARS,
-    month: AdjustDateUnit.MONTHS,
-    hour: AdjustDateUnit.HOURS,
-    minute: AdjustDateUnit.MINUTES,
+  const sign = match?.[1]
+  const value = match?.[2]
+  const unit = match?.[3]
+
+  let newValue = parseInt(value)
+  if (sign === '-') newValue = -newValue
+
+  switch (unit) {
+    case 'h':
+      return AdjustDate(newValue, AdjustDateUnit.HOURS, referenceDate)
+    case 'd':
+      return AdjustDate(newValue, AdjustDateUnit.DAYS, referenceDate)
+    case 'm':
+      return AdjustDate(newValue, AdjustDateUnit.MONTHS, referenceDate)
+    case 'y':
+      return AdjustDate(newValue, AdjustDateUnit.YEARS, referenceDate)
+    default:
+      return referenceDate
   }
-
-  for (const key in unitMap) {
-    if (unit.startsWith(key)) {
-      return AdjustDate(referenceDate, unitMap[key], parseInt(value))
-    }
-  }
-
-  return referenceDate
 }

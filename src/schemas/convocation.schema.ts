@@ -1,6 +1,6 @@
 import { User } from './user.schema'
 
-import { AdjustDate, AdjustDateUnit } from '@/common/helpers/date.helper'
+import { AdjustDateEasy } from '@/common/helpers/date.helper'
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
@@ -32,7 +32,7 @@ export class Convocation {
   @IsString({ each: true })
   selectedUsers: User[]
 
-  @Prop({ default: AdjustDate(new Date(), AdjustDateUnit.DAYS, 7) })
+  @Prop({ default: AdjustDateEasy('7d') })
   @IsDate()
   expiresAt: Date
 
