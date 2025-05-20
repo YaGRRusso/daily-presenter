@@ -28,7 +28,10 @@ export class ConvocationsService {
     { selectedLength, expiresAt, ...createConvocationDto }: CreateConvocationDto,
     user?: JwtUser,
   ) {
-    const randomizedUsers = this.shuffleAndSlice(createConvocationDto.invitedUsers, selectedLength)
+    const randomizedUsers = this.shuffleAndSlice(
+      [...createConvocationDto.invitedUsers],
+      selectedLength,
+    )
     const parsedExpiresAt = AdjustDateEasy(expiresAt).toISOString()
 
     const newConvocation = new this.ConvocationModel({
