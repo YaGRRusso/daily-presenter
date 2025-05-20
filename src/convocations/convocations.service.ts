@@ -87,7 +87,7 @@ export class ConvocationsService {
 
   async slack(user?: JwtUser) {
     const currentWeekDays = CurrentWeekDays()
-    const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000/convocations/key'
+    const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000'
 
     const users = await this.usersService.findAll()
     const invitedUsers = users.map((user) => user.id)
@@ -144,7 +144,7 @@ export class ConvocationsService {
             text: [
               'Escolhidos para apresentar',
               ...presentersList,
-              `_<${[baseUrl, curiosityKey].join('/')}|ver detalhes>_`,
+              `_<${[baseUrl, 'convocations/key', presenterKey].join('/')}|ver detalhes>_`,
             ].join('\n'),
           },
         },
@@ -165,7 +165,7 @@ export class ConvocationsService {
             text: [
               'Escolhidos para compartilhar curiosidades',
               ...curiositiesList,
-              `_<${[baseUrl, curiosityKey].join('/')}|ver detalhes>_`,
+              `_<${[baseUrl, 'convocations/key', curiosityKey].join('/')}|ver detalhes>_`,
             ].join('\n'),
           },
         },
