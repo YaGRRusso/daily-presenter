@@ -85,6 +85,7 @@ export class ConvocationsService {
     return this.ConvocationModel.deleteOne({ _id: id }).exec()
   }
 
+  // https://app.slack.com/block-kit-builder
   async slack(user?: JwtUser) {
     const currentWeekDays = CurrentWeekDays()
     const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000'
@@ -139,7 +140,7 @@ export class ConvocationsService {
 
     const generateDeployerList = (users: User[]) => {
       return users.map((user) => {
-        return `- ${user.slackId ? `<@${user.slackId}>` : user.username}`
+        return `${user.slackId ? `<@${user.slackId}>` : user.username}`
       })
     }
 
@@ -154,7 +155,8 @@ export class ConvocationsService {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: 'Apresentadores da Daily',
+            text: ':mega: Apresentadores da Daily',
+            emoji: true,
           },
         },
         {
@@ -175,7 +177,8 @@ export class ConvocationsService {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: 'Curiosidades da Daily',
+            text: ':bulb: Curiosidades da Daily',
+            emoji: true,
           },
         },
         {
@@ -196,7 +199,8 @@ export class ConvocationsService {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: 'Deployer da Semana',
+            text: ':rocket: Deployer da Semana',
+            emoji: true,
           },
         },
         {
