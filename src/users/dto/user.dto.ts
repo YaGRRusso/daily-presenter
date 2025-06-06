@@ -30,6 +30,11 @@ export class UserDto extends CommonDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  job: string
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   @IsEmail()
   email: string
 

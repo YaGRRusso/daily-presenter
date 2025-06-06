@@ -90,7 +90,8 @@ export class ConvocationsService {
     const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000'
 
     const users = await this.usersService.findAll()
-    const invitedUsers = users.map((user) => user.id)
+    const everyoneIds = users.map((user) => user.id)
+    const developersIds = users.filter((user) => user.job === 'developer').map((user) => user.id)
     const expiresAt = currentWeekDays[6].date
 
     const presenterKey = 'week-presenter'
@@ -99,7 +100,7 @@ export class ConvocationsService {
         name: 'Presenter Convocation',
         key: presenterKey,
         selectedLength: 5,
-        invitedUsers,
+        invitedUsers: everyoneIds,
         expiresAt,
       },
       user,
@@ -111,21 +112,40 @@ export class ConvocationsService {
         name: 'Curiosity Convocation',
         key: curiosityKey,
         selectedLength: 5,
-        invitedUsers,
+        invitedUsers: everyoneIds,
         expiresAt,
       },
       user,
     )
 
-    const generateList = (users: User[]) => {
+    const deployerKey = 'week-deployer'
+    const deployer = await this.findOneOrCreate(
+      {
+        name: 'Deployer Convocation',
+        key: deployerKey,
+        selectedLength: 1,
+        invitedUsers: developersIds,
+        expiresAt,
+      },
+      user,
+    )
+
+    const generatePresentersList = (users: User[]) => {
       return users.map((user, index) => {
         const { day, date } = currentWeekDays[index + 1]
         return `- ${day} (${date.toLocaleDateString('pt', { day: '2-digit', month: '2-digit' })}): ${user.slackId ? `<@${user.slackId}>` : user.username}`
       })
     }
 
-    const presentersList = generateList(presenter.selectedUsers)
-    const curiositiesList = generateList(curiosity.selectedUsers)
+    const generateDeployerList = (users: User[]) => {
+      return users.map((user) => {
+        return `- ${user.slackId ? `<@${user.slackId}>` : user.username}`
+      })
+    }
+
+    const presentersList = generatePresentersList(presenter.selectedUsers)
+    const curiositiesList = generatePresentersList(curiosity.selectedUsers)
+    const deployerList = generateDeployerList(deployer.selectedUsers)
 
     return {
       response_type: 'in_channel',
@@ -166,6 +186,27 @@ export class ConvocationsService {
               'Escolhidos para compartilhar curiosidades:',
               ...curiositiesList,
               `_<${[baseUrl, 'convocations/key', curiosityKey].join('/')}|ver detalhes>_`,
+            ].join('\n'),
+          },
+        },
+        {
+          type: 'divider',
+        },
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: 'Deployer da Semana',
+          },
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: [
+              'Escolhido para fazer as releases e deploys:',
+              ...deployerList,
+              `_<${[baseUrl, 'convocations/key', deployerKey].join('/')}|ver detalhes>_`,
             ].join('\n'),
           },
         },

@@ -22,6 +22,11 @@ export class User {
   @IsString()
   name: string
 
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  job: string
+
   @Prop({ required: true, unique: true })
   @IsNotEmpty()
   @IsEmail()
