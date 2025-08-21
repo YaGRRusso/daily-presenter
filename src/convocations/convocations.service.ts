@@ -92,7 +92,7 @@ export class ConvocationsService {
 
   // https://app.slack.com/block-kit-builder
   async slack(user?: JwtUser) {
-    const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000'
+    const baseUrl = 'http://ec2-18-231-212-234.sa-east-1.compute.amazonaws.com:3000'
 
     const lastWeekDeployerUsers = await this.ConvocationModel.find({
       key: { $regex: /^week-deployer/ },

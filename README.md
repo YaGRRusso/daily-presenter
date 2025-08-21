@@ -14,7 +14,7 @@ Este projeto é uma aplicação backend desenvolvida com o framework [NestJS](ht
 
 Este projeto foi feito utilizando a biblioteca Swagger, que facilita a documentação de cada rota da aplicação incluindo tipagem de `Body`, `Parameter`, `Response` e `Header` de requisições.
 
-[**Acesse a documentação da API no Swagger**](http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000/swagger)
+[**Acesse a documentação da API no Swagger**](http://ec2-18-231-212-234.sa-east-1.compute.amazonaws.com:3000/swagger)
 
 ## Instalação
 
