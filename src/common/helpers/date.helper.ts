@@ -72,8 +72,31 @@ export function CurrentWeekDays(referenceDate?: Date) {
   startDate.setDate(adjustedDate.getDate() - weekday)
   startDate.setHours(0, 0, 0, 0)
 
-  return DayNames.map((day, index) => {
+  return Array.from({ length: 7 }).map((_, index) => {
     const date = AdjustDate(index, DateUnit.DAYS, startDate)
-    return { day, date }
+    return { day: DayNames[date.getDay()], date }
   })
+}
+
+export function CurrentMonthDays(referenceDate?: Date) {
+  const adjustedDate = referenceDate ? new Date(referenceDate) : new Date()
+  const startDate = new Date(adjustedDate.getFullYear(), adjustedDate.getMonth(), 1)
+  const endDate = new Date(adjustedDate.getFullYear(), adjustedDate.getMonth() + 1, 0)
+  const daysInMonth = endDate.getDate()
+
+  return Array.from({ length: daysInMonth }).map((_, index) => {
+    const date = new Date(startDate)
+    date.setHours(0, 0, 0, 0)
+    date.setDate(index + 1)
+    return { day: DayNames[date.getDay()], date }
+  })
+}
+
+export function CurrentMonthWeek(referenceDate?: Date): number {
+  const adjustedDate = referenceDate ? new Date(referenceDate) : new Date()
+  const firstDayOfMonth = CurrentMonthDays(adjustedDate)[0].date
+  const firstDayOfWeek = firstDayOfMonth.getDay()
+
+  const dayOfMonth = adjustedDate.getDate()
+  return Math.ceil((dayOfMonth + firstDayOfWeek) / 7)
 }

@@ -3,7 +3,12 @@ import { FindConvocationDto } from './dto/find-convocation.dto'
 import { UpdateConvocationDto } from './dto/update-convocation.dto'
 
 import { JwtUser } from '@/auth/entities/user.entity'
-import { AdjustDateEasy, CurrentWeekDays } from '@/common/helpers/date.helper'
+import {
+  AdjustDateEasy,
+  CurrentMonthDays,
+  CurrentMonthWeek,
+  CurrentWeekDays,
+} from '@/common/helpers/date.helper'
 import { ApplyQuery, QueryMethod } from '@/common/helpers/query.helper'
 import { Convocation } from '@/schemas/convocation.schema'
 import { User } from '@/schemas/user.schema'
@@ -87,13 +92,25 @@ export class ConvocationsService {
 
   // https://app.slack.com/block-kit-builder
   async slack(user?: JwtUser) {
-    const currentWeekDays = CurrentWeekDays()
     const baseUrl = 'http://ec2-18-228-3-189.sa-east-1.compute.amazonaws.com:3000'
+
+    const lastWeekDeployerUsers = await this.ConvocationModel.find({
+      key: { $regex: /^week-deployer/ },
+    }).then((convocations) =>
+      convocations.flatMap((convocation) => convocation.selectedUsers.map(String)),
+    )
+
+    const currentWeekDays = CurrentWeekDays()
+    const currentMonthDays = CurrentMonthDays()
+    const currentMonthWeek = CurrentMonthWeek()
+
+    const lastWeekDay = currentWeekDays[currentWeekDays.length - 1].date
+    const lastMonthDay = currentMonthDays[currentMonthDays.length - 1].date
 
     const users = await this.usersService.findAll()
     const everyoneIds = users.map((user) => user.id)
     const developersIds = users.filter((user) => user.job === 'developer').map((user) => user.id)
-    const expiresAt = currentWeekDays[6].date
+    const availableDevelopersIds = developersIds.filter((id) => !lastWeekDeployerUsers.includes(id))
 
     const presenterKey = 'week-presenter'
     const presenter = await this.findOneOrCreate(
@@ -102,7 +119,7 @@ export class ConvocationsService {
         key: presenterKey,
         selectedLength: 5,
         invitedUsers: everyoneIds,
-        expiresAt,
+        expiresAt: lastWeekDay,
       },
       user,
     )
@@ -114,19 +131,19 @@ export class ConvocationsService {
         key: curiosityKey,
         selectedLength: 5,
         invitedUsers: everyoneIds,
-        expiresAt,
+        expiresAt: lastWeekDay,
       },
       user,
     )
 
-    const deployerKey = 'week-deployer'
+    const deployerKey = `week-deployer-${currentMonthWeek}`
     const deployer = await this.findOneOrCreate(
       {
         name: 'Deployer Convocation',
         key: deployerKey,
         selectedLength: 1,
-        invitedUsers: developersIds,
-        expiresAt,
+        invitedUsers: availableDevelopersIds.length ? availableDevelopersIds : developersIds,
+        expiresAt: lastMonthDay,
       },
       user,
     )
