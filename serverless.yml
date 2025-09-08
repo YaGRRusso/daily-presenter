@@ -7,6 +7,7 @@ provider:
   runtime: nodejs20.x
   region: sa-east-1
   stage: prod
+  architecture: arm64
   environment:
     STAGE: prod
     DATABASE_URL: ${ssm:/daily-presenter/prod/DATABASE_URL}
