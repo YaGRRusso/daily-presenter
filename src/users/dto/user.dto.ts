@@ -1,42 +1,47 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { CommonDto } from '@/common/dto/common.dto'
-import { RoleDto } from '@/common/dto/role.dto'
-import { ApplyMixins } from '@/common/helpers/mixins.helper'
+import { CommonDto } from "@/common/dto/common.dto";
+import { RoleDto } from "@/common/dto/role.dto";
+import { ApplyMixins } from "@/common/helpers/mixins.helper";
 
-import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from 'class-validator'
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from "class-validator";
 
 export class UserDto extends CommonDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  id: string
+  id: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  slackId?: string
+  slackId?: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  username: string
+  username: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  name: string
+  name: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  job: string
+  job: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  email: string
+  email: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -48,14 +53,13 @@ export class UserDto extends CommonDto {
     minSymbols: 1,
     minLength: 8,
   })
-  password: string
+  password: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  avatar: string
+  avatar: string;
 }
 
-// eslint-disable-next-line
 export interface UserDto extends RoleDto {}
-ApplyMixins(UserDto, [RoleDto])
+ApplyMixins(UserDto, [RoleDto]);

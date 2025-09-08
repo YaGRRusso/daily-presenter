@@ -14,7 +14,6 @@
     "start:prod": "node dist/main",
     "start:db": "sudo systemctl start mongod",
     "stop:db": "sudo systemctl stop mongod",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -54,12 +53,6 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.40.0",
-    "@typescript-eslint/parser": "^8.40.0",
-    "@yagrrusso/eslint-config": "^1.3.5",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
     "jest": "^30.0.5",
     "lint-staged": "^16.1.5",
@@ -89,10 +82,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "lint-staged": {
-    "**/*.{js, jsx, ts, tsx}": [
-      "eslint --fix"
-    ]
   }
 }
