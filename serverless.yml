@@ -1,0 +1,42 @@
+service: daily-presenter
+
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: sa-east-1
+  stage: prod
+  environment:
+    STAGE: prod
+    DATABASE_URL: ${ssm:/daily-presenter/prod/DATABASE_URL}
+    JWT_SECRET: ${ssm:/daily-presenter/prod/JWT_SECRET}
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:GetParameters
+          Resource:
+            - arn:aws:ssm:${self:provider.region}:*:parameter/daily-presenter/prod/DATABASE_URL
+            - arn:aws:ssm:${self:provider.region}:*:parameter/daily-presenter/prod/JWT_SECRET
+
+functions:
+  api:
+    handler: dist/lambda.handler
+    timeout: 10
+    memorySize: 256
+    events:
+      - httpApi: "*"
+
+package:
+  excludeDevDependencies: true
+  individually: true
+  patterns:
+    - dist/**
+    - package.json
+    - package-lock.json
+plugins:
+  - serverless-offline

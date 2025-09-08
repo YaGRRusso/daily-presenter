@@ -11,9 +11,17 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { config } from 'dotenv'
 
 config()
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL not defined')
+}
+
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    MongooseModule.forRoot(process.env.DATABASE_URL, {
+      serverSelectionTimeoutMS: 3000,
+      connectTimeoutMS: 3000,
+    }),
     UsersModule,
     AuthModule,
     ConvocationsModule,

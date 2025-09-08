@@ -22,17 +22,48 @@ Este projeto foi feito utilizando a biblioteca Swagger, que facilita a documenta
 $ npm install
 ```
 
-## Executando a Aplicação
+## Execução Local (Lambda simulation)
 
 ```bash
-# desenvolvimento
-$ npm run start
+# build
+npm run build
 
-# modo watch
-$ npm run start:dev
+# lambda offline
+export DATABASE_URL='mongodb://localhost:27017/daily'
+npm run offline
+```
 
-# produção
-$ npm run start:prod
+## Deploy AWS Lambda (produção única)
+
+Pré-requisitos:
+
+- Credenciais AWS configuradas (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY) ou SSO/Role assumida.
+- Parâmetros seguros em SSM Parameter Store (produção).
+
+Criação dos parâmetros (uma vez):
+
+```bash
+aws ssm put-parameter --name /daily-presenter/prod/DATABASE_URL --type SecureString --value 'mongodb+srv://...'
+aws ssm put-parameter --name /daily-presenter/prod/JWT_SECRET --type SecureString --value 'super-secret'
+```
+
+Deploy:
+
+```bash
+npm run deploy
+```
+
+Após o deploy, o output mostra HttpApiUrl. Teste:
+
+```bash
+curl -i https://<api-id>.execute-api.sa-east-1.amazonaws.com/
+```
+
+Rollback:
+
+```bash
+serverless deploy list
+serverless deploy rollback -t <timestamp>
 ```
 
 ## Licença
