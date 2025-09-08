@@ -1,20 +1,29 @@
 export enum QueryMethod {
-  AND = 'and',
-  OR = 'or',
+  AND = "and",
+  OR = "or",
 }
 
-export function ApplyQuery(query: Record<string, any> = {}, method?: QueryMethod) {
-  if (!method) return query
+export function ApplyQuery(
+  query: Record<string, any> = {},
+  method?: QueryMethod
+) {
+  if (!method) {
+    return query;
+  }
 
-  const result = Object.keys(query).reduce((acc, key) => {
-    if (query[key]) acc.push({ [key]: { $regex: new RegExp(query[key], 'i') } })
-    return acc
-  }, [])
+  const result = Object.keys(query).reduce((acc: any[], key) => {
+    if (query[key]) {
+      acc.push({ [key]: { $regex: new RegExp(query[key], "i") } });
+    }
+    return acc;
+  }, []);
 
   switch (method) {
     case QueryMethod.AND:
-      return { $and: result }
+      return { $and: result };
     case QueryMethod.OR:
-      return { $or: result }
+      return { $or: result };
+    default:
+      return query;
   }
 }
