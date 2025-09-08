@@ -1,6 +1,11 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite"],
+  "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    }
+  },
   "linter": {
     "rules": {
       "suspicious": {
@@ -9,7 +14,8 @@
       "style": {
         "noEnum": "off",
         "noMagicNumbers": "off",
-        "noParameterProperties": "off"
+        "noParameterProperties": "off",
+        "useImportType": "off"
       }
     }
   }

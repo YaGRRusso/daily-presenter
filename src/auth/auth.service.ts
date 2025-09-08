@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import type { JwtService } from "@nestjs/jwt";
+import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcrypt";
 import { RoleEnum } from "@/common/dto/role.dto";
-import type { UsersService } from "@/users/users.service";
+import { UsersService } from "@/users/users.service";
 import type { AuthPayload } from "./entities/payload.entity";
 
 @Injectable()
