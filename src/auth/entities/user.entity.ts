@@ -1,8 +1,8 @@
-import { RoleEnum } from '@/common/dto/role.dto'
+import { RoleEnum } from "@/common/dto/role.dto";
 
 export class JwtUser {
-  id: string
-  email: string
-  name: string
-  role: RoleEnum
+  id: string;
+  email: string;
+  name: string;
+  role: RoleEnum;
 }

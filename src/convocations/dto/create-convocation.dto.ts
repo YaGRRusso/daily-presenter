@@ -1,15 +1,14 @@
-import { ConvocationDto } from './convocation.dto'
-
-import { PickType } from '@nestjs/swagger'
-import { IsNumber, IsOptional } from 'class-validator'
+import { PickType } from "@nestjs/swagger";
+import { IsNumber, IsOptional } from "class-validator";
+import { ConvocationDto } from "./convocation.dto";
 
 export class CreateConvocationDto extends PickType(ConvocationDto, [
-  'expiresAt',
-  'invitedUsers',
-  'key',
-  'name',
+  "expiresAt",
+  "invitedUsers",
+  "key",
+  "name",
 ]) {
   @IsOptional()
   @IsNumber()
-  selectedLength: number
+  selectedLength: number;
 }

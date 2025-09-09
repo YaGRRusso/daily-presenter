@@ -9,13 +9,18 @@
   "linter": {
     "rules": {
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noEmptyBlockStatements": "off"
       },
       "style": {
         "noEnum": "off",
         "noMagicNumbers": "off",
         "noParameterProperties": "off",
-        "useImportType": "off"
+        "useImportType": "off",
+        "useAtIndex": "off"
+      },
+      "performance": {
+        "useTopLevelRegex": "off"
       }
     }
   }

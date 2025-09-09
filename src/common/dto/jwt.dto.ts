@@ -1,23 +1,22 @@
-import { RoleEnum } from './role.dto'
-
-import { ApiProperty } from '@nestjs/swagger'
-import { IsEnum, IsString } from 'class-validator'
+import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum, IsString } from "class-validator";
+import { RoleEnum } from "./role.dto";
 
 export class JwtDto {
   @ApiProperty()
   @IsString()
-  id: string
+  id: string;
 
   @ApiProperty()
   @IsString()
-  email: string
+  email: string;
 
   @ApiProperty()
   @IsString()
-  name: string
+  name: string;
 
   @ApiProperty()
   @IsString()
   @IsEnum(RoleEnum)
-  role: RoleEnum
+  role: RoleEnum;
 }

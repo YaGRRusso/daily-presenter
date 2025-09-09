@@ -1,7 +1,3 @@
-import { CommonDto } from "@/common/dto/common.dto";
-import { RoleDto } from "@/common/dto/role.dto";
-import { ApplyMixins } from "@/common/helpers/mixins.helper";
-
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsEmail,
@@ -10,7 +6,11 @@ import {
   IsString,
   IsStrongPassword,
 } from "class-validator";
+import { CommonDto } from "@/common/dto/common.dto";
+import { RoleDto } from "@/common/dto/role.dto";
+import { ApplyMixins } from "@/common/helpers/mixins.helper";
 
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: skip this
 export class UserDto extends CommonDto {
   @ApiProperty()
   @IsNotEmpty()

@@ -1,6 +1,4 @@
-import { RoleEnum } from '@/common/dto/role.dto'
-
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import {
   IsEmail,
   IsEnum,
@@ -8,29 +6,30 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
-} from 'class-validator'
+} from "class-validator";
+import { RoleEnum } from "@/common/dto/role.dto";
 
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
   @IsNotEmpty()
   @IsString()
-  username: string
+  username: string;
 
   @Prop({ required: true })
   @IsNotEmpty()
   @IsString()
-  name: string
+  name: string;
 
   @Prop({ required: true })
   @IsNotEmpty()
   @IsString()
-  job: string
+  job: string;
 
   @Prop({ required: true, unique: true })
   @IsNotEmpty()
   @IsEmail()
-  email: string
+  email: string;
 
   @Prop({ required: true })
   @IsNotEmpty()
@@ -42,23 +41,23 @@ export class User {
     minSymbols: 1,
     minLength: 8,
   })
-  password: string
+  password: string;
 
   @Prop()
   @IsOptional()
   @IsString()
-  avatar?: string
+  avatar?: string;
 
   @Prop({ default: RoleEnum.USER })
   @IsOptional()
   @IsString()
   @IsEnum(RoleEnum)
-  role?: RoleEnum
+  role?: RoleEnum;
 
   @Prop()
   @IsOptional()
   @IsString()
-  slackId?: string
+  slackId?: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User)
+export const UserSchema = SchemaFactory.createForClass(User);

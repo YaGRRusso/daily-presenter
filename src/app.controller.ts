@@ -1,8 +1,7 @@
-import { AppService } from './app.service'
-import { IsPublic } from './auth/decorators/public.decorator'
-
-import { Body, Controller, Get } from '@nestjs/common'
-import { ApiResponse } from '@nestjs/swagger'
+import { Body, Controller, Get } from "@nestjs/common";
+import { ApiResponse } from "@nestjs/swagger";
+import { AppService } from "./app.service";
+import { IsPublic } from "./auth/decorators/public.decorator";
 
 @Controller()
 export class AppController {
@@ -12,6 +11,6 @@ export class AppController {
   @Get()
   @IsPublic()
   getHello(@Body() data?: any): string {
-    return this.appService.getHello(data)
+    return this.appService.getHello(data);
   }
 }

@@ -1,9 +1,9 @@
-type Constructor<T = object> = new (...args: any[]) => T
+type Constructor<T = object> = new (...args: any[]) => T;
 
 export function ApplyMixins(baseClass: Constructor, mixins: Constructor[]) {
-  mixins.forEach((mixin) => {
-    Object.getOwnPropertyNames(mixin.prototype).forEach((name) => {
-      baseClass.prototype[name] = mixin.prototype[name]
-    })
-  })
+  for (const mixin of mixins) {
+    for (const name of Object.getOwnPropertyNames(mixin.prototype)) {
+      baseClass.prototype[name] = mixin.prototype[name];
+    }
+  }
 }
