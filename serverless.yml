@@ -27,7 +27,7 @@ provider:
 functions:
   api:
     handler: dist/lambda.handler
-    timeout: 5
+    timeout: 10
     memorySize: 256
     events:
       - httpApi: "*"
